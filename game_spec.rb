@@ -48,3 +48,38 @@ describe Cell do
   	expect(@stable_cell.neighbors).to include(@cell)
   end
 end
+
+describe Game do
+	it "should be created with a valid array of bits" do
+		expect{ Game.new(Array.new(rand(10)+1){Array.new(rand(10)+1){rand(2)}}) }.not_to raise_error
+	end
+
+	it "should not find any cells to change on a stable board" do
+		@game = Game.new([[1,1],[1,1]])
+		expect(@game.cells_to_change).to be_empty
+	end
+
+	it "should not change a stable board on new generation" do
+		@game = Game.new([[1,1],[1,1]])
+		@cell = @game.board[rand(2)][rand(2)]
+		@living = @cell.alive
+		@game.generate!
+		expect(@living).to eq(@cell.alive)
+	end
+
+	it "should find cells to change in an unstable board" do
+	@game = Game.new([[1,1],[1,0]])
+		expect(@game.cells_to_change.length).to be > 0
+	end
+
+	it "should change an unstable board on new generation" do
+		@game = Game.new([[1,1],[1,0]])
+		expect(@game.board[1][1].alive).to be(false)
+		@game.generate!
+		expect(@game.board[1][1].alive).to be(true)
+	end
+
+	it "should know if the board is empty" do
+		expect(Game.new(Array.new(rand(10+1)){Array.new(rand(10)+1,0)}).clear?).to be(true)
+	end
+end
