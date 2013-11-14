@@ -2,6 +2,6 @@ This is my attempt at simulating Conway's Game of Life. The game will run until 
 
 To run the game:
 
-'''$ ruby life.rb [# of rows] [# of cols]
+  $ ruby life.rb [# of rows] [# of cols]
 
 Enjoy!
