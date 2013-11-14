@@ -1,38 +1,31 @@
-require_relative 'cell.rb'
+require_relative 'game.rb'
 
-class Game
-	attr_reader :board
-	def initialize(nested_array)
-		@board = nested_array.map { |row| row.map{ |cell| Cell.new( cell==1 ) } }
-		connect_cells
+class Play
+	attr_reader :game
+	def initialize(board)
+		@game = Game.new(board)
 	end
 
-	def generate!
-		cells_to_change.each { |cell| cell.toggle! }
+	def render
+		clear_screen
+		hr = "\u2500" * (@game.board[0].length * 2 - 1)
+		display_board = "\u250c"+hr+"\u2510\n"
+		display_board += @game.board.map{|row| "\u2502"+row.map{ |cell| cell.alive ? "\u2588" : " "}.join(" ") + "\u2502"}.join("\n")
+		puts display_board + "\n\u2514"+hr+"\u2518"
 	end
 
-	def cells_to_change
-		@board.flatten.inject([]) { |pile, cell| cell.should_change? ? pile + [cell] : pile }
-	end
-
-	def connect_cells
-		@board.each_index do |x|
-			@board[x].each_with_index do |cell, y|
-				(-1..1).each do |x_offset|
-					(-1..1).each do |y_offset|
-						cell.connect_to(@board[x+x_offset][y+y_offset]) if cell_at(x+x_offset, y+y_offset)
-					end
-				end
-			end
-		end
-	end
-
-	def cell_at(x,y)
-		x >= 0 && y >= 0 && @board[x] && @board[x][y]
-	end
-
-	def clear?
-		@board.flatten.each{|c| return false if c.alive}
-		true
+	def clear_screen
+		puts "\e[2J\e[f"
 	end
 end
+
+rows = ARGV[0].to_i || rand(10)+1
+cols = ARGV[1].to_i || rand(10)+1
+play = Play.new(Array.new(rows){Array.new(cols){rand(2)}})
+50.times do
+	play.render
+	play.game.generate!
+	break if play.game.clear?
+	sleep(0.5)
+end
+play.render
