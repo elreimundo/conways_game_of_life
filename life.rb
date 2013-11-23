@@ -19,8 +19,8 @@ class Play
 	end
 end
 
-rows = ARGV[0].to_i || rand(10)+1
-cols = ARGV[1].to_i || rand(10)+1
+rows = ARGV[0] ? ARGV[0].to_i : rand(30)+1
+cols = ARGV[1] ? ARGV[1].to_i : rand(30)+1
 play = Play.new(Array.new(rows){Array.new(cols){rand(2)}})
 50.times do
 	play.render

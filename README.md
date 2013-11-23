@@ -2,6 +2,8 @@ This is my attempt at simulating Conway's Game of Life. The game will run until 
 
 To run the game:
 
-  $ ruby life.rb [# of rows] [# of cols]
+    $ ruby life.rb number_of_rows number_of_cols
+
+If no arguments are given for number_of_rows or number_of_cols, the board will default to a random number between 1 and 50.
 
 Enjoy!
