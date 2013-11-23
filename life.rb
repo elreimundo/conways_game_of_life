@@ -21,8 +21,9 @@ end
 
 rows = ARGV[0] ? ARGV[0].to_i : rand(30)+1
 cols = ARGV[1] ? ARGV[1].to_i : rand(30)+1
+generations = ARGV[2] ? ARGV[2].to_i : 50
 play = Play.new(Array.new(rows){Array.new(cols){rand(2)}})
-50.times do
+generations.times do
 	play.render
 	play.game.generate!
 	break if play.game.clear?
